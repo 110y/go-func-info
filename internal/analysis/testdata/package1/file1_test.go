@@ -2,6 +2,8 @@ package package1
 
 type MyType struct{}
 
+type MyInterface interface{}
+
 func F1(x, y int) int {
 	return x + y
 }
@@ -18,4 +20,24 @@ var F3 = func() {
 
 func (t *MyType) F4() {
 	_ = 1
+}
+
+func F5() MyType {
+	return MyType{}
+}
+
+func F6() (int, error) {
+	return 0, nil
+}
+
+func F7() (MyInterface, error) {
+	return nil, nil
+}
+
+func F8() (*MyType, error) {
+	return nil, nil
+}
+
+func F9() (MyType, error) {
+	return MyType{}, nil
 }
