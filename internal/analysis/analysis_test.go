@@ -52,7 +52,7 @@ func TestGetFuncInfo(t *testing.T) {
 				EndPos:   211,
 				Receiver: &analysis.ReceiverInfo{
 					Name:     "t",
-					TypeName: "MyType",
+					TypeName: "*github.com/110y/go-func-info/internal/analysis/testdata/package1.MyType",
 				},
 			},
 		},
@@ -140,6 +140,25 @@ func TestGetFuncInfo(t *testing.T) {
 						TypeName:  "github.com/110y/go-func-info/internal/analysis/testdata/package1.MyType",
 						ZeroValue: "MyType{}",
 					},
+					{
+						TypeName:  "error",
+						ZeroValue: "nil",
+					},
+				},
+			},
+		},
+		"should return expected ResultInfo with custom generic struct receiver": {
+			path: "package1/file1_test.go",
+			pos:  482,
+			expected: &analysis.FuncInfo{
+				Name:     "F10",
+				StartPos: 450,
+				EndPos:   493,
+				Receiver: &analysis.ReceiverInfo{
+					Name:     "m",
+					TypeName: "github.com/110y/go-func-info/internal/analysis/testdata/package1.MyType",
+				},
+				Results: []*analysis.ResultInfo{
 					{
 						TypeName:  "error",
 						ZeroValue: "nil",

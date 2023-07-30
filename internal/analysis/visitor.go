@@ -70,11 +70,13 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 			Name: fd.Name.Name,
 		}
 
-		if fd.Recv != nil {
+		if fd.Recv != nil && len(fd.Recv.List) > 0 && len(fd.Recv.List[0].Names) > 0 {
 			recv := fd.Recv.List[0]
-			v.funcInfo.Receiver = &ReceiverInfo{
-				Name:     recv.Names[0].Name,
-				TypeName: recv.Type.(*ast.StarExpr).X.(*ast.Ident).Name,
+			if recvType, ok := v.info.Types[recv.Type]; ok {
+				v.funcInfo.Receiver = &ReceiverInfo{
+					Name:     fd.Recv.List[0].Names[0].Name,
+					TypeName: recvType.Type.String(),
+				}
 			}
 		}
 

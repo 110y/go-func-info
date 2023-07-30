@@ -41,3 +41,9 @@ func F8() (*MyType, error) {
 func F9() (MyType, error) {
 	return MyType{}, nil
 }
+
+func (m MyType) F10() error {
+	return nil
+}
+
+type MyGenerictype[T any] struct{}
