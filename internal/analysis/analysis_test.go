@@ -166,6 +166,26 @@ func TestGetFuncInfo(t *testing.T) {
 				},
 			},
 		},
+		"should return expected ResultInfo with the func literal": {
+			path: "package1/file1_test.go",
+			pos:  622,
+			expected: &analysis.FuncInfo{
+				Name:     "",
+				StartPos: 593,
+				EndPos:   640,
+				Receiver: nil,
+				Results: []*analysis.ResultInfo{
+					{
+						TypeName:  "bool",
+						ZeroValue: "false",
+					},
+					{
+						TypeName:  "error",
+						ZeroValue: "nil",
+					},
+				},
+			},
+		},
 	}
 
 	for name, test := range tests {

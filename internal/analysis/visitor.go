@@ -61,13 +61,23 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 
-	if fd, ok := node.(*ast.FuncDecl); ok {
-		if fd.Name == nil {
-			return nil
+	var funcType *ast.FuncType
+
+	if ft, ok := node.(*ast.FuncLit); ok {
+		v.funcInfo = &FuncInfo{
+			Name:     "",
+			Receiver: nil,
 		}
 
+		funcType = ft.Type
+	} else if fd, ok := node.(*ast.FuncDecl); ok {
 		v.funcInfo = &FuncInfo{
-			Name: fd.Name.Name,
+			Name:     "",
+			Receiver: nil,
+		}
+
+		if fd.Name != nil {
+			v.funcInfo.Name = fd.Name.Name
 		}
 
 		if fd.Recv != nil && len(fd.Recv.List) > 0 && len(fd.Recv.List[0].Names) > 0 {
@@ -80,8 +90,15 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 
-		if fd.Type.Results != nil {
-			for _, f := range fd.Type.Results.List {
+		funcType = fd.Type
+	}
+
+	if funcType != nil {
+		v.funcInfo.StartPos = startPos
+		v.funcInfo.EndPos = endPos
+
+		if funcType.Results != nil {
+			for _, f := range funcType.Results.List {
 				if t, ok := v.info.Types[f.Type]; ok {
 					ri := &ResultInfo{
 						TypeName:  t.Type.String(),
@@ -96,11 +113,6 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 				}
 			}
 		}
-
-		v.funcInfo.StartPos = startPos
-		v.funcInfo.EndPos = endPos
-
-		return nil
 	}
 
 	return v

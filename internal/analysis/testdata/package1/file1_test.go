@@ -47,3 +47,14 @@ func (m MyType) F10() error {
 }
 
 type MyGenerictype[T any] struct{}
+
+func f11() (int, error) {
+	_ = func() (string, error) {
+		_ = func() (bool, error) {
+			return false, nil
+		}
+		return "", nil
+	}
+
+	return 0, nil
+}
